@@ -4,6 +4,8 @@ project(Aronda)
 include_directories(3rd_party/catch2)
 include_directories(3rd_party/range)
 
+add_compile_options("/std:c++latest")
+
 set(AR_ETL_PATH "" CACHE PATH "Path for ETL header files.")
 if(AR_ETL_PATH)
 	include_directories(${AR_ETL_PATH})

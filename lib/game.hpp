@@ -1,5 +1,8 @@
 #pragma once
 
+#include "player.hpp"
+#include "square.hpp"
+
 #include <utility>
 
 namespace Aronda
@@ -15,4 +18,4 @@ public:
     static std::size_t numberOfSquares();
 };
 
-} // Aronda
+}

@@ -13,4 +13,4 @@ std::size_t Game::numberOfSquares()
     return 25;
 }
 
-} // Aronda
+}
