@@ -2,12 +2,6 @@
 
 CC=gcc-7 && CXX=g++-7
 
-ls /usr/bin
-
-clang++ --version
-g++ --version
-gcov --version
-
 mkdir build
 cd build
 cmake ..
