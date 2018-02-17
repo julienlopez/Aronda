@@ -10,6 +10,8 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 else()
 	message("using ${CMAKE_CXX_COMPILER_ID}")
 	add_definitions("-std=c++17")
+	add_definitions("-fprofile-arcs")
+	add_definitions("-ftest-coverage")
 endif()
 
 set(AR_ETL_PATH "" CACHE PATH "Path for ETL header files.")

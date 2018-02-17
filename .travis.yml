@@ -9,8 +9,11 @@ os:
 before_install:
 - sudo chmod 777 ./travis-scripts/*
 - ./travis-scripts/dependencies.sh
+- pip install --user cpp-coveralls
 script:
 - ./travis-scripts/build.sh
+after_success:
+  - coveralls --exclude tests --gcov-options '\-lp'
 
 branches:
   only:
