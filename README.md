@@ -5,3 +5,4 @@ Aronda game with RL
 [![License](https://img.shields.io/github/license/julienlopez/Aronda.svg)](http://github.com/julienlopez/Aronda)
 
 [![Travis](https://img.shields.io/travis/julienlopez/Aronda.svg)]()
+[![Coverage Status](https://coveralls.io/repos/github/julienlopez/Aronda/badge.svg?branch=master)](https://coveralls.io/github/julienlopez/Aronda?branch=master)
