@@ -10711,11 +10711,11 @@ namespace Catch {
 
 namespace Catch {
     bool uncaught_exceptions() {
-#if defined(CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
-        return std::uncaught_exceptions() > 0;
-#else
+// #if defined(CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS)
+//         return std::uncaught_exceptions() > 0;
+// #else
         return std::uncaught_exception();
-#endif
+// #endif
   }
 } // end namespace Catch
 // end catch_uncaught_exceptions.cpp
