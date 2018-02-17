@@ -13,7 +13,7 @@ before_install:
 script:
   - ./travis-scripts/build.sh
 after_success:
-  - coveralls --include ../lib --exclude ../third_party --exclude tests --gcov-options '\-lp' --verbose
+  - coveralls --include ../lib --include ./lib/CMakeFiles/libAronda.dir --exclude ../third_party --exclude tests --gcov-options '\-lp' --verbose
 
 branches:
   only:
