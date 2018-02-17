@@ -29,12 +29,11 @@ public:
 
     SquareState squareState(const Square square_index) const;
 
-	void placeStone(Square square_index, Player player_index, const std::size_t number_of_stones);
+    void placeStone(Square square_index, Player player_index, const std::size_t number_of_stones);
 
     static std::size_t maxNumberOfStonesOnASquare(const Square square_index);
 
 private:
-	std::array<SquareState, c_number_of_squares> m_square_states;
+    std::array<SquareState, c_number_of_squares> m_square_states;
 };
-
 }
