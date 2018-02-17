@@ -2,18 +2,18 @@ language: cpp
 sudo: required
 dist: trusty
 compiler:
-- clang
+  - clang
 os:
-- linux
+  - linux
 
 before_install:
-- sudo chmod 777 ./travis-scripts/*
-- ./travis-scripts/dependencies.sh
-- pip install --user cpp-coveralls
+  - sudo chmod 777 ./travis-scripts/*
+  - ./travis-scripts/dependencies.sh
+  - pip install --user cpp-coveralls
 script:
-- ./travis-scripts/build.sh
+  - ./travis-scripts/build.sh
 after_success:
-  - coveralls --include lib --exclude ../third_party --exclude tests --gcov-options '\-lp'
+  - coveralls --include ../lib --exclude ../third_party --exclude tests --gcov-options '\-lp' --verbose
 
 branches:
   only:
