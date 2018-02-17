@@ -1,2 +1,16 @@
-sudo: enabled
 language: cpp
+sudo: required
+dist: trusty
+compiler:
+- clang
+os:
+- linux
+
+before_install:
+- ./travis-scripts/dependencies.sh
+script:
+- ./travis-scripts/build.sh
+
+branches:
+  only:
+  - master
