@@ -25,7 +25,7 @@ void Game::placeStone(Square square_index, Player player_index, const std::size_
 
 std::size_t Game::maxNumberOfStonesOnASquare(const Square square_index)
 {
-    switch(square_index)
+    switch(static_cast<std::size_t>(square_index))
     {
     case 1:
     case 10:
