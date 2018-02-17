@@ -22,7 +22,7 @@ TEST_CASE("Testing basic game properties", "[game]")
         }
     }
 
-    SECTION("Max number of stones on a sqaure")
+    SECTION("Max number of stones on a square")
     {
 		for (const auto i : range(Aronda::c_number_of_squares))
 		{
