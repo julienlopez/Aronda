@@ -12,6 +12,7 @@ else()
 	add_definitions("-std=c++17")
 	add_definitions("-fprofile-arcs")
 	add_definitions("-ftest-coverage")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
 endif()
 
 set(AR_ETL_PATH "" CACHE PATH "Path for ETL header files.")
