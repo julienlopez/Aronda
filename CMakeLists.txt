@@ -3,9 +3,14 @@ project(Aronda)
 
 include_directories(3rd_party/catch2)
 include_directories(3rd_party/range)
-
-add_compile_options("/std:c++latest")
-add_definitions("-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE")
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+	message("using visual")
+	add_compile_options("/std:c++latest")
+	add_definitions("-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE")
+else()
+	message("using ${CMAKE_CXX_COMPILER_ID}")
+	add_definitions("-std=c++17")
+endif()
 
 set(AR_ETL_PATH "" CACHE PATH "Path for ETL header files.")
 if(AR_ETL_PATH)
