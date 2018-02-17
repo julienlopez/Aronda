@@ -10,6 +10,11 @@ using Aronda::Game;
 
 TEST_CASE("Testing placing a stone on en empty board", "[game]")
 {
+#ifdef CATCH_CPP17_OR_GREATER
+	std::wcout << "c++17" << std::endl;
+#else
+	std::wcout << "plop" << std::endl;
+#endif
     Game g;
 
     SECTION("Playing one stone on an empty 3 capacity square")
