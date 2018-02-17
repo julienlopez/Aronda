@@ -7,5 +7,6 @@ make unit_tests
 
 ls -lh .
 ls -lh ./lib
+ls -lh ./lib/CMakeFiles
 ls -lh ..
 ls -lh ../lib
