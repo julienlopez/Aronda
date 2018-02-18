@@ -12,11 +12,35 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
 {
     Game g;
 
-    SECTION("Playing one stone on an empty 3 capacity square")
+    SECTION("Playing 1 stone on an empty 3 capacity square")
     {
         Aronda::Square s{19};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
         CHECK_NOTHROW(g.placeStone(s, Aronda::Player(0), 1));
         CHECK(g.squareState(s) == Aronda::SquareState{{1, 0}, {}});
     }
+
+	SECTION("Playing 2 stone on an empty 3 capacity square")
+	{
+		Aronda::Square s{ 19 };
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 0, 0 },{} });
+		CHECK_NOTHROW(g.placeStone(s, Aronda::Player(0), 2));
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 2, 0 },{} });
+	}
+
+	SECTION("Playing 1 stone on an empty 2 capacity square")
+	{
+		Aronda::Square s{ 20 };
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 0, 0 },{} });
+		CHECK_NOTHROW(g.placeStone(s, Aronda::Player(0), 1));
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 1, 0 },{} });
+	}
+
+	SECTION("Playing 2 stone on an empty 2 capacity square")
+	{
+		Aronda::Square s{ 20 };
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 0, 0 },{} });
+		CHECK_NOTHROW(g.placeStone(s, Aronda::Player(0), 2));
+		CHECK(g.squareState(s) == Aronda::SquareState{ { 2, 0 },{Aronda::Player(0)} });
+	}
 }

@@ -21,6 +21,8 @@ SquareState Game::squareState(const Square square_index) const
 void Game::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones)
 {
     m_square_states[square_index].placed_stones[player_index] += number_of_stones;
+	if (m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
+		m_square_states[square_index].player_locked = player_index;
 }
 
 std::size_t Game::maxNumberOfStonesOnASquare(const Square square_index)
