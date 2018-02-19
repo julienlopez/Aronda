@@ -1,5 +1,6 @@
 #pragma once
 
+#include "forbiddenmove.hpp"
 #include "player.hpp"
 #include "square.hpp"
 
