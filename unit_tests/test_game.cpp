@@ -27,9 +27,9 @@ TEST_CASE("Testing basic game properties", "[game]")
         for(const auto i : range(Aronda::c_number_of_squares))
         {
             const auto max_nb_stones = Game::maxNumberOfStonesOnASquare(Aronda::Square(i));
-            if(i == 18 || i == 20 || i == 22 || i == 24)
+            if(i == 17 || i == 19 || i == 21 || i == 23)
                 CHECK(max_nb_stones == 2);
-            else if(i == 1 || i == 10 || i == 12 || i == 14 || i == 16)
+            else if(i == 0 || i == 9 || i == 11 || i == 13 || i == 15)
                 CHECK(max_nb_stones == 4);
             else
                 CHECK(max_nb_stones == 3);

@@ -21,24 +21,24 @@ SquareState Game::squareState(const Square square_index) const
 void Game::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones)
 {
     m_square_states[square_index].placed_stones[player_index] += number_of_stones;
-	if (m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
-		m_square_states[square_index].player_locked = player_index;
+    if(m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
+        m_square_states[square_index].player_locked = player_index;
 }
 
 std::size_t Game::maxNumberOfStonesOnASquare(const Square square_index)
 {
     switch(static_cast<std::size_t>(square_index))
     {
-    case 1:
-    case 10:
-    case 12:
-    case 14:
-    case 16:
+    case 0:
+    case 9:
+    case 11:
+    case 13:
+    case 15:
         return 4;
-    case 18:
-    case 20:
-    case 22:
-    case 24:
+    case 17:
+    case 19:
+    case 21:
+    case 23:
         return 2;
     default:
         return 3;
