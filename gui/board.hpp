@@ -16,11 +16,11 @@ protected:
     virtual void paintEvent(QPaintEvent* evt) override;
 
 private:
-    void drawCircles(QPainter& p, const QPoint& center, const int outter_radius) const;
+    void drawCircles(QPainter& p, const int outter_radius) const;
 
-    void drawLines(QPainter& p, const QPoint& center, const int outter_radius) const;
+    void drawLines(QPainter& p, const int outter_radius) const;
 
-	void drawMaxmimumsInSquares(QPainter& p, const QPoint& center, const int outter_radius) const;
+	void drawMaxmimumsInSquares(QPainter& p, const int outter_radius) const;
 };
 
 }
