@@ -20,7 +20,7 @@ script:
 after_success:
   # Creating report
   - cd ${TRAVIS_BUILD_DIR}
-  - lcov --directory libs --directory  gui --directory build --capture --output-file --no-external coverage.info # capture coverage info
+  - lcov --directory libs --directory  gui --directory build --capture --no-external --output-file coverage.info # capture coverage info
   - lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter out system
   - lcov --remove coverage.info '3rd_party/*' --output-file coverage.info # filter out system
   - lcov --list coverage.info #debug info
