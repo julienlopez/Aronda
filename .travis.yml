@@ -13,7 +13,13 @@ before_install:
 script:
   - ./travis-scripts/build.sh
 after_success:
-  - coveralls --include ../lib --include ./lib/CMakeFiles/libAronda.dir --exclude ../third_party --exclude unit_tests --exclude /usr/include --gcov-options '\-lp' --verbose
+  # Creating report
+  - cd ${TRAVIS_BUILD_DIR}
+  - lcov --directory . --capture --output-file coverage.info # capture coverage info
+  - lcov --remove coverage.info '/usr/*' --output-file coverage.info # filter out system
+  - lcov --list coverage.info #debug info
+  # Uploading report to CodeCov
+  - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
 
 branches:
   only:
