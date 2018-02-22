@@ -22,7 +22,6 @@ private:
 
     void drawLines(QPainter& p, const GameSquareContainer_t& squares) const;
 
-	void drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squares) const;
+    void drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squares) const;
 };
-
 }
