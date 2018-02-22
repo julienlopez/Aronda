@@ -15,13 +15,17 @@ public:
     virtual ~Board() = default;
 
 protected:
+	virtual void resizeEvent(QResizeEvent* evt) override;
+
     virtual void paintEvent(QPaintEvent* evt) override;
 
 private:
-    void drawCircles(QPainter& p, const int outter_radius) const;
+	GameSquareContainer_t m_squares;
 
-    void drawLines(QPainter& p, const GameSquareContainer_t& squares) const;
+    void drawCircles(QPainter& p) const;
 
-    void drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squares) const;
+    void drawLines(QPainter& p) const;
+
+    void drawMaxmimumsInSquares(QPainter& p) const;
 };
 }

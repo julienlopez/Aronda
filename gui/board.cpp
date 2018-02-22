@@ -32,44 +32,50 @@ Board::Board(QWidget* parent)
     setMinimumSize(600, 600);
 }
 
+void Board::resizeEvent(QResizeEvent* evt)
+{
+	QWidget::resizeEvent(evt);
+	const auto size = (int)(std::min(width(), height()) * 0.95);
+	const auto outter_radius = size / 2;
+	m_squares = buildSquares(outter_radius);
+}
+
 void Board::paintEvent(QPaintEvent* evt)
 {
     QPainter p(this);
-    const auto size = (int)(std::min(width(), height()) * 0.95);
-    const auto outter_radius = size / 2;
     p.translate(width() / 2, height() / 2);
-    const auto squares = buildSquares(outter_radius);
-    drawCircles(p, outter_radius);
-    drawLines(p, squares);
-    drawMaxmimumsInSquares(p, squares);
+    drawCircles(p);
+    drawLines(p);
+    drawMaxmimumsInSquares(p);
 }
 
-void Board::drawCircles(QPainter& p, const int outter_radius) const
+void Board::drawCircles(QPainter& p) const
 {
+	const int outter_radius = m_squares.back().outter_radius;
     p.drawEllipse({0, 0}, outter_radius, outter_radius);
     p.drawEllipse({0, 0}, 3 * outter_radius / 4, 3 * outter_radius / 4);
     p.drawEllipse({0, 0}, outter_radius / 2, outter_radius / 2);
     p.drawEllipse({0, 0}, outter_radius / 4, outter_radius / 4);
 }
 
-void Board::drawLines(QPainter& p, const GameSquareContainer_t& squares) const
+void Board::drawLines(QPainter& p) const
 {
-    auto it = begin(squares);
+    auto it = begin(m_squares);
     std::advance(it, 1);
-    for(; it != end(squares); ++it)
+    for(; it != end(m_squares); ++it)
     {
         p.drawLine(QLineF(toPoint({it->inner_radius, it->min_angle}), toPoint({it->outter_radius, it->min_angle})));
         p.drawLine(QLineF(toPoint({it->inner_radius, it->max_angle}), toPoint({it->outter_radius, it->max_angle})));
     }
 }
 
-void Board::drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squares) const
+void Board::drawMaxmimumsInSquares(QPainter& p) const
 {
     const double dot_size = 4;
     p.save();
     p.setBrush(Qt::black);
     // inner circle
-    const auto dist = squares.back().outter_radius / 16;
+    const auto dist = m_squares.back().outter_radius / 16;
     p.drawEllipse(QPointF(dist, dist), dot_size, dot_size);
     p.drawEllipse(QPointF(dist, -dist), dot_size, dot_size);
     p.drawEllipse(QPointF(-dist, dist), dot_size, dot_size);
@@ -77,7 +83,7 @@ void Board::drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squ
 
     for(const auto square_id : {9, 11, 13, 15}) // third row
     {
-        const auto& square = squares[square_id];
+        const auto& square = m_squares[square_id];
         const auto angle = (square.max_angle + square.min_angle) / 2.;
         const auto min_dist = square.inner_radius;
         const auto max_dist = square.outter_radius;
@@ -88,7 +94,7 @@ void Board::drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squ
     }
     for(const auto square_id : {17, 19, 21, 23}) // fourth row
     {
-        const auto& square = squares[square_id];
+        const auto& square = m_squares[square_id];
         const auto angle = (square.max_angle + square.min_angle) / 2.;
         const auto min_dist = square.inner_radius;
         const auto max_dist = square.outter_radius;
