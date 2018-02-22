@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gamesquare.hpp"
+
 #include <QWidget>
 
 namespace Aronda
@@ -13,14 +15,17 @@ public:
     virtual ~Board() = default;
 
 protected:
+	virtual void resizeEvent(QResizeEvent* evt) override;
+
     virtual void paintEvent(QPaintEvent* evt) override;
 
 private:
-    void drawCircles(QPainter& p, const int outter_radius) const;
+	GameSquareContainer_t m_squares;
 
-    void drawLines(QPainter& p, const int outter_radius) const;
+    void drawCircles(QPainter& p) const;
 
-	void drawMaxmimumsInSquares(QPainter& p, const int outter_radius) const;
+    void drawLines(QPainter& p) const;
+
+    void drawMaxmimumsInSquares(QPainter& p) const;
 };
-
 }

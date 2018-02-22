@@ -1,4 +1,5 @@
 include_directories(".")
+include_directories("../lib")
 
 set(AR_QT_ROOT_DIR "" CACHE PATH "Use specific Qt folder?")
 set(AR_QT_MODULES Qt5Core Qt5Gui Qt5Widgets)
