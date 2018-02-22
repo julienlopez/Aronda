@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gamesquare.hpp"
+
 #include <QWidget>
 
 namespace Aronda
@@ -18,7 +20,7 @@ protected:
 private:
     void drawCircles(QPainter& p, const int outter_radius) const;
 
-    void drawLines(QPainter& p, const int outter_radius) const;
+    void drawLines(QPainter& p, const GameSquareContainer_t& squares) const;
 
 	void drawMaxmimumsInSquares(QPainter& p, const int outter_radius) const;
 };
