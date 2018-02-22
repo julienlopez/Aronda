@@ -3,6 +3,7 @@
 #include "game.hpp"
 
 #include <gsl/gsl_assert>
+#include <gsl/gsl_util>
 
 namespace Aronda
 {
@@ -15,14 +16,16 @@ namespace Aronda
 		res.push_back({ 0., outter_radius / 4., 0. * radians, 2. * PI });
 		for (int i = 0; i < 8; i++) // second circle for the center
 		{
-			const auto angle = i / 4. * PI;
-			res.push_back({ outter_radius / 4, outter_radius / 2, angle - PI / 0.8, angle + PI / 0.8 });
+			const auto angle = (i + 0.5) / 4. * PI;
+			const auto delta = PI / 8.;
+			res.push_back({ outter_radius / 4, outter_radius / 2, angle - delta, angle + delta });
 		}
 
 		for(int i = 0; i < 8; i++) // third circle for the center
 		{
-			const auto angle = (i + 0.5) * PI / 4.;
-			res.push_back({ outter_radius / 2, 3 * outter_radius / 4, angle - PI / 0.8, angle + PI / 0.8 });
+			const auto angle = gsl::narrow<double>(i) * PI / 4.;
+			const auto delta = PI / 8.;
+			res.push_back({ outter_radius / 2, 3 * outter_radius / 4, angle - delta, angle + delta });
 		}
 
 		for(int i = 0; i < 4; i++) // fourth circle for the center

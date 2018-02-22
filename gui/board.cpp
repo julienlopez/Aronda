@@ -6,6 +6,8 @@
 
 #include <QPainter>
 
+#include <iostream>
+
 namespace Aronda
 {
 
@@ -40,7 +42,7 @@ void Board::paintEvent(QPaintEvent* evt)
 	const auto squares = buildSquares(outter_radius);
     drawCircles(p, outter_radius);
     drawLines(p, squares);
-	drawMaxmimumsInSquares(p, outter_radius);
+	drawMaxmimumsInSquares(p, squares);
 }
 
 void Board::drawCircles(QPainter& p, const int outter_radius) const
@@ -56,35 +58,41 @@ void Board::drawLines(QPainter& p, const GameSquareContainer_t& squares) const
 	auto it = begin(squares);
 	std::advance(it, 1);
 	for (; it != end(squares); ++it)
+	{
 		p.drawLine(QLineF(toPoint({ it->inner_radius, it->min_angle }), toPoint({ it->outter_radius, it->min_angle })));
+		p.drawLine(QLineF(toPoint({ it->inner_radius, it->max_angle }), toPoint({ it->outter_radius, it->max_angle })));
+	}
 }
 
-void Board::drawMaxmimumsInSquares(QPainter& p, const int outter_radius) const
+void Board::drawMaxmimumsInSquares(QPainter& p, const GameSquareContainer_t& squares) const
 {
 	const double dot_size = 4;
 	p.save();
 	p.setBrush(Qt::black);
 	// inner circle
-	const auto dist = outter_radius / 16;
+	const auto dist = squares.back().outter_radius / 16;
 	p.drawEllipse(QPointF(dist, dist), dot_size, dot_size);
 	p.drawEllipse(QPointF(dist, -dist), dot_size, dot_size);
 	p.drawEllipse(QPointF(-dist, dist), dot_size, dot_size);
 	p.drawEllipse(QPointF(-dist, -dist), dot_size, dot_size);
-	for (int i = 0; i < 4; i++) // third row
+
+	for (const auto square_id : { 9, 11, 13, 15 }) // third row
 	{
-		const auto angle = 4 * i / 8. * PI;
-		const auto min_dist = outter_radius / 2;
-		const auto max_dist = 3 * outter_radius / 4;
+		const auto& square = squares[square_id];
+		const auto angle = (square.max_angle + square.min_angle) / 2.;
+		const auto min_dist = square.inner_radius;
+		const auto max_dist = square.outter_radius;
 		p.drawEllipse(toPoint({ (max_dist - min_dist) / 3. + min_dist, angle }), dot_size, dot_size);
 		p.drawEllipse(toPoint({ 2 * (max_dist - min_dist) / 3. + min_dist, angle }), dot_size, dot_size);
-		p.drawEllipse(toPoint({ (max_dist - min_dist) / 2. + min_dist, angle + PI / 5. / 8.}), dot_size, dot_size);
-		p.drawEllipse(toPoint({ (max_dist - min_dist) / 2. + min_dist, angle - PI / 5. / 8.}), dot_size, dot_size);
+		p.drawEllipse(toPoint({ (max_dist - min_dist) / 2. + min_dist, angle + PI / 5. / 8. }), dot_size, dot_size);
+		p.drawEllipse(toPoint({ (max_dist - min_dist) / 2. + min_dist, angle - PI / 5. / 8. }), dot_size, dot_size);
 	}
-	for (int i = 0; i < 4; i++) // fourth row
+	for (const auto square_id : { 17, 19, 21, 23 }) // fourth row
 	{
-		const auto angle = 4 * i / 8. * PI;
-		const auto min_dist = 3 * outter_radius / 4;
-		const auto max_dist = outter_radius;
+		const auto& square = squares[square_id];
+		const auto angle = (square.max_angle + square.min_angle) / 2.;
+		const auto min_dist = square.inner_radius;
+		const auto max_dist = square.outter_radius;
 		p.drawEllipse(toPoint({ (max_dist - min_dist) / 3. + min_dist, angle }), dot_size, dot_size);
 		p.drawEllipse(toPoint({ 2 * (max_dist - min_dist) / 3. + min_dist, angle }), dot_size, dot_size);
 	}
