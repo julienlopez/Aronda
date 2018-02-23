@@ -14,6 +14,12 @@ namespace Aronda
 class Board : public QWidget
 {
 public:
+    struct PolarPoint
+    {
+        double radius;
+        Angle_t angle;
+    };
+
     Board(QWidget* parent = nullptr);
 
     virtual ~Board() = default;
@@ -22,6 +28,8 @@ protected:
     virtual void resizeEvent(QResizeEvent* evt) override;
 
     virtual void paintEvent(QPaintEvent* evt) override;
+
+    virtual void mouseMoveEvent(QMouseEvent* evt) override;
 
 private:
     GameSquareContainer_t m_squares;
@@ -34,5 +42,7 @@ private:
     void drawMaxmimumsInSquares(QPainter& p) const;
 
     void drawCurrentSquare(QPainter& p) const;
+
+    boost::optional<Square> findSquare(const PolarPoint& p) const;
 };
 }

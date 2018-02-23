@@ -5,6 +5,8 @@
 #include <gsl/gsl_assert>
 #include <gsl/gsl_util>
 
+#include <iostream>
+
 namespace Aronda
 {
 
@@ -39,10 +41,10 @@ namespace
         GameSquareContainer_t res;
         for(int i = 0; i < 4; i++) // fourth circle for the center
         {
-            const auto min_angle = (4 * i + 0.5) * PI / 8.;
-            const auto max_angle = (4 * i - 0.5) * PI / 8.;
+            const auto min_angle = (4 * i - 0.5) * PI / 8.;
+            const auto max_angle = (4 * i + 0.5) * PI / 8.;
             res.push_back({3 * outter_radius / 4, outter_radius, min_angle, max_angle});
-            res.push_back({3 * outter_radius / 4, outter_radius, max_angle, (4 * i + 1.5) * PI / 8.});
+            res.push_back({3 * outter_radius / 4, outter_radius, max_angle, max_angle + 3. * PI / 8.});
         }
         return res;
     }

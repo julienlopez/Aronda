@@ -4,9 +4,10 @@
 
 #include <gsl/gsl_util>
 
+#include <QMouseEvent>
 #include <QPainter>
 
-#include <iostream>
+using boost::units::si::radians;
 
 namespace Aronda
 {
@@ -14,18 +15,12 @@ namespace Aronda
 namespace
 {
 
-    struct PolarPoint
-    {
-        double radius;
-        Angle_t angle;
-    };
-
     auto transformAngle(const Angle_t& a)
     {
         return PI / 2. - a;
     };
 
-    QPointF toPoint(const PolarPoint& p)
+    QPointF toPoint(const Board::PolarPoint& p)
     {
         const auto a = transformAngle(p.angle);
         return {p.radius * std::cos(a.value()), -p.radius * std::sin(a.value())};
@@ -39,9 +34,9 @@ namespace
 
 Board::Board(QWidget* parent)
     : QWidget(parent)
-    , m_current_square(1)
 {
     setMinimumSize(600, 600);
+    setMouseTracking(true);
 }
 
 void Board::resizeEvent(QResizeEvent* evt)
@@ -56,14 +51,25 @@ void Board::paintEvent(QPaintEvent* evt)
 {
     QPainter p(this);
     p.translate(width() / 2, height() / 2);
-	auto pen = p.pen();
-	pen.setWidth(2);
-	p.setPen(pen);
-	p.setRenderHint(QPainter::HighQualityAntialiasing);
+    auto pen = p.pen();
+    pen.setWidth(2);
+    p.setPen(pen);
+    p.setRenderHint(QPainter::HighQualityAntialiasing);
     drawCurrentSquare(p);
     drawCircles(p);
     drawLines(p);
     drawMaxmimumsInSquares(p);
+}
+
+void Board::mouseMoveEvent(QMouseEvent* evt)
+{
+    const auto pos = evt->pos() - QPoint(width(), height()) / 2;
+    const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
+    auto angle = std::atan2(pos.x(), -pos.y()) * radians;
+    auto res = findSquare({radius, angle});
+    if(!res) res = findSquare({radius, angle + 2. * PI});
+    m_current_square = res;
+    update();
 }
 
 void Board::drawCircles(QPainter& p) const
@@ -126,7 +132,7 @@ void Board::drawCurrentSquare(QPainter& p) const
     if(!m_current_square) return;
     const auto& square = m_squares[*m_current_square];
     p.save();
-	p.setPen(Qt::NoPen);
+    p.setPen(Qt::NoPen);
     p.setBrush(Qt::red);
     QPainterPath pp;
     pp.moveTo(toPoint({square.inner_radius, square.min_angle}));
@@ -140,5 +146,18 @@ void Board::drawCurrentSquare(QPainter& p) const
 
     p.drawPath(pp);
     p.restore();
+}
+
+boost::optional<Square> Board::findSquare(const PolarPoint& p) const
+{
+
+    for(std::size_t i = 0; i < m_squares.size(); i++)
+    {
+        const auto& s = m_squares[i];
+        if(p.radius < s.inner_radius || p.radius > s.outter_radius) continue;
+        if(p.angle < s.min_angle || p.angle > s.max_angle) continue;
+        return Square(i);
+    }
+    return boost::none;
 }
 }
