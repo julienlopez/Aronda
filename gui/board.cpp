@@ -56,6 +56,10 @@ void Board::paintEvent(QPaintEvent* evt)
 {
     QPainter p(this);
     p.translate(width() / 2, height() / 2);
+	auto pen = p.pen();
+	pen.setWidth(2);
+	p.setPen(pen);
+	p.setRenderHint(QPainter::HighQualityAntialiasing);
     drawCurrentSquare(p);
     drawCircles(p);
     drawLines(p);
@@ -122,6 +126,7 @@ void Board::drawCurrentSquare(QPainter& p) const
     if(!m_current_square) return;
     const auto& square = m_squares[*m_current_square];
     p.save();
+	p.setPen(Qt::NoPen);
     p.setBrush(Qt::red);
     QPainterPath pp;
     pp.moveTo(toPoint({square.inner_radius, square.min_angle}));
