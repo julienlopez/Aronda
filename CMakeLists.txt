@@ -3,6 +3,8 @@ project(Aronda)
 
 include_directories(3rd_party/catch2)
 include_directories(3rd_party/range)
+include_directories(expected)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	message("using visual")
 	add_compile_options("/std:c++latest")

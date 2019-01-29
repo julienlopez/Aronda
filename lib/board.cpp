@@ -18,16 +18,19 @@ SquareState Board::squareState(const Square square_index) const
     return m_square_states[square_index];
 }
 
-void Board::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones)
+tl::expected<Board, InvalidMove> Board::placeStone(Square square_index, Player player_index,
+                                                   const std::size_t number_of_stones) const
 {
     if(m_square_states[square_index].placed_stones[player_index] + number_of_stones
        > maxNumberOfStonesOnASquare(square_index))
-        throw ForbiddenMove("too many stones");
-    m_square_states[square_index].placed_stones[player_index] += number_of_stones;
-    if(m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
+        return tl::make_unexpected(InvalidMove::TooManyStones);
+    Board res;
+    res.m_square_states[square_index].placed_stones[player_index] += number_of_stones;
+    if(res.m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
     {
-        m_square_states[square_index].player_locked = player_index;
+        res.m_square_states[square_index].player_locked = player_index;
     }
+    return res;
 }
 
 std::size_t Board::maxNumberOfStonesOnASquare(const Square square_index)
