@@ -1,6 +1,6 @@
-#include "board.hpp"
+#include "boardwidget.hpp"
 
-#include "game.hpp"
+#include "board.hpp"
 
 #include <gsl/gsl_util>
 
@@ -20,7 +20,7 @@ namespace
         return PI / 2. - a;
     };
 
-    QPointF toPoint(const Board::PolarPoint& p)
+    QPointF toPoint(const BoardWidget::PolarPoint& p)
     {
         const auto a = transformAngle(p.angle);
         return {p.radius * std::cos(a.value()), -p.radius * std::sin(a.value())};
@@ -32,14 +32,14 @@ namespace
     }
 }
 
-Board::Board(QWidget* parent)
+BoardWidget::BoardWidget(QWidget* parent)
     : QWidget(parent)
 {
     setMinimumSize(600, 600);
     setMouseTracking(true);
 }
 
-void Board::resizeEvent(QResizeEvent* evt)
+void BoardWidget::resizeEvent(QResizeEvent* evt)
 {
     QWidget::resizeEvent(evt);
     const auto size = (int)(std::min(width(), height()) * 0.95);
@@ -47,7 +47,7 @@ void Board::resizeEvent(QResizeEvent* evt)
     m_squares = buildSquares(outter_radius);
 }
 
-void Board::paintEvent(QPaintEvent* evt)
+void BoardWidget::paintEvent(QPaintEvent* evt)
 {
     QPainter p(this);
     p.translate(width() / 2, height() / 2);
@@ -61,7 +61,7 @@ void Board::paintEvent(QPaintEvent* evt)
     drawMaxmimumsInSquares(p);
 }
 
-void Board::mouseMoveEvent(QMouseEvent* evt)
+void BoardWidget::mouseMoveEvent(QMouseEvent* evt)
 {
     const auto pos = evt->pos() - QPoint(width(), height()) / 2;
     const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
@@ -72,7 +72,7 @@ void Board::mouseMoveEvent(QMouseEvent* evt)
     update();
 }
 
-void Board::drawCircles(QPainter& p) const
+void BoardWidget::drawCircles(QPainter& p) const
 {
     const int outter_radius = m_squares.back().outter_radius;
     p.drawEllipse({0, 0}, outter_radius, outter_radius);
@@ -81,7 +81,7 @@ void Board::drawCircles(QPainter& p) const
     p.drawEllipse({0, 0}, outter_radius / 4, outter_radius / 4);
 }
 
-void Board::drawLines(QPainter& p) const
+void BoardWidget::drawLines(QPainter& p) const
 {
     auto it = begin(m_squares);
     std::advance(it, 1);
@@ -92,7 +92,7 @@ void Board::drawLines(QPainter& p) const
     }
 }
 
-void Board::drawMaxmimumsInSquares(QPainter& p) const
+void BoardWidget::drawMaxmimumsInSquares(QPainter& p) const
 {
     const double dot_size = 4;
     p.save();
@@ -127,7 +127,7 @@ void Board::drawMaxmimumsInSquares(QPainter& p) const
     p.restore();
 }
 
-void Board::drawCurrentSquare(QPainter& p) const
+void BoardWidget::drawCurrentSquare(QPainter& p) const
 {
     if(!m_current_square) return;
     const auto& square = m_squares[*m_current_square];
@@ -148,7 +148,7 @@ void Board::drawCurrentSquare(QPainter& p) const
     p.restore();
 }
 
-boost::optional<Square> Board::findSquare(const PolarPoint& p) const
+boost::optional<Square> BoardWidget::findSquare(const PolarPoint& p) const
 {
 
     for(std::size_t i = 0; i < m_squares.size(); i++)

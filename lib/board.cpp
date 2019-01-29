@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "board.hpp"
 
 namespace Aronda
 {
@@ -8,17 +8,17 @@ bool operator==(const SquareState& ss1, const SquareState& ss2)
     return ss1.placed_stones == ss2.placed_stones && ss1.player_locked == ss2.player_locked;
 }
 
-Game::Game()
+Board::Board()
 {
     std::fill(begin(m_square_states), end(m_square_states), SquareState{{0, 0}, {}});
 }
 
-SquareState Game::squareState(const Square square_index) const
+SquareState Board::squareState(const Square square_index) const
 {
     return m_square_states[square_index];
 }
 
-void Game::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones)
+void Board::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones)
 {
     if(m_square_states[square_index].placed_stones[player_index] + number_of_stones
        > maxNumberOfStonesOnASquare(square_index))
@@ -30,7 +30,7 @@ void Game::placeStone(Square square_index, Player player_index, const std::size_
     }
 }
 
-std::size_t Game::maxNumberOfStonesOnASquare(const Square square_index)
+std::size_t Board::maxNumberOfStonesOnASquare(const Square square_index)
 {
     switch(static_cast<std::size_t>(square_index))
     {

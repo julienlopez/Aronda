@@ -1,6 +1,6 @@
 #include "gamesquare.hpp"
 
-#include "game.hpp"
+#include "board.hpp"
 
 #include <gsl/gsl_assert>
 #include <gsl/gsl_util>

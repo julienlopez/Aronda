@@ -27,10 +27,10 @@ using AdjacencyList_t = std::map<Square, std::set<Square>>;
 
 bool operator==(const SquareState& ss1, const SquareState& ss2);
 
-class Game
+class Board
 {
 public:
-    Game();
+    Board();
 
     SquareState squareState(const Square square_index) const;
 

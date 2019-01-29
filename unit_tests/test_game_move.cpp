@@ -1,16 +1,16 @@
 #include <catch.hpp>
 
-#include "game.hpp"
+#include "board.hpp"
 
 #include <numeric_range.hpp>
 
 #include <boost/optional/optional_io.hpp>
 
-using Aronda::Game;
+using Aronda::Board;
 
 TEST_CASE("Testing placing a stone on en empty board", "[game]")
 {
-    Game g;
+    Board g;
 
     SECTION("Playing 1 stone on an empty 3 capacity square")
     {

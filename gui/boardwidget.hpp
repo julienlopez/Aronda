@@ -11,7 +11,7 @@
 namespace Aronda
 {
 
-class Board : public QWidget
+class BoardWidget : public QWidget
 {
 public:
     struct PolarPoint
@@ -20,9 +20,9 @@ public:
         Angle_t angle;
     };
 
-    Board(QWidget* parent = nullptr);
+    explicit BoardWidget(QWidget* parent = nullptr);
 
-    virtual ~Board() = default;
+    virtual ~BoardWidget() = default;
 
 protected:
     virtual void resizeEvent(QResizeEvent* evt) override;
