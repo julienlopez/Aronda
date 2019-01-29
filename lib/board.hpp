@@ -1,6 +1,5 @@
 #pragma once
 
-#include "forbiddenmove.hpp"
 #include "player.hpp"
 #include "square.hpp"
 
@@ -40,6 +39,9 @@ class Board
 public:
     using ExpectedBoard = tl::expected<Board, InvalidMove>;
 
+    /**
+     * @brief construct an empty board
+     */
     Board();
 
     SquareState squareState(const Square square_index) const;
@@ -51,4 +53,5 @@ public:
 private:
     std::array<SquareState, c_number_of_squares> m_square_states;
 };
+
 } // namespace Aronda

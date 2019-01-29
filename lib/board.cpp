@@ -21,10 +21,11 @@ SquareState Board::squareState(const Square square_index) const
 auto Board::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones) const
     -> ExpectedBoard
 {
+    if(m_square_states[square_index].player_locked) return tl::make_unexpected(InvalidMove::SquareLocked);
     if(m_square_states[square_index].placed_stones[player_index] + number_of_stones
        > maxNumberOfStonesOnASquare(square_index))
         return tl::make_unexpected(InvalidMove::TooManyStones);
-    Board res;
+    Board res = *this;
     res.m_square_states[square_index].placed_stones[player_index] += number_of_stones;
     if(res.m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
     {
