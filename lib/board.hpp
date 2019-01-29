@@ -38,12 +38,13 @@ bool operator==(const SquareState& ss1, const SquareState& ss2);
 class Board
 {
 public:
+    using ExpectedBoard = tl::expected<Board, InvalidMove>;
+
     Board();
 
     SquareState squareState(const Square square_index) const;
 
-    tl::expected<Board, InvalidMove> placeStone(Square square_index, Player player_index,
-                                                const std::size_t number_of_stones) const;
+    ExpectedBoard placeStone(Square square_index, Player player_index, const std::size_t number_of_stones) const;
 
     static std::size_t maxNumberOfStonesOnASquare(const Square square_index);
 
