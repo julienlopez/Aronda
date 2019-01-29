@@ -5,6 +5,8 @@
 #include "square.hpp"
 
 #include <array>
+#include <map>
+#include <set>
 
 #include <boost/optional.hpp>
 
@@ -20,6 +22,8 @@ struct SquareState
     std::array<std::size_t, c_number_of_players> placed_stones;
     boost::optional<Player> player_locked;
 };
+
+using AdjacencyList_t = std::map<Square, std::set<Square>>;
 
 bool operator==(const SquareState& ss1, const SquareState& ss2);
 
