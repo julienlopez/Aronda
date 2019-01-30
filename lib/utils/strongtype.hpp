@@ -9,7 +9,7 @@ namespace Aronda::Utils
 
 template <class T> struct StrongType
 {
-    explicit StrongType(const T index)
+    explicit constexpr StrongType(const T index)
         : m_index(index)
     {
     }
