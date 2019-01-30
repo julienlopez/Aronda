@@ -18,18 +18,18 @@ SquareState Board::squareState(const Square square_index) const
     return m_square_states[square_index];
 }
 
-auto Board::placeStone(Square square_index, Player player_index, const std::size_t number_of_stones) const
-    -> ExpectedBoard
+auto Board::placeStone(const Move move) const -> ExpectedBoard
 {
-    if(m_square_states[square_index].player_locked) return tl::make_unexpected(InvalidMove::SquareLocked);
-    if(m_square_states[square_index].placed_stones[player_index] + number_of_stones
-       > maxNumberOfStonesOnASquare(square_index))
+    if(m_square_states[move.square_index].player_locked) return tl::make_unexpected(InvalidMove::SquareLocked);
+    if(m_square_states[move.square_index].placed_stones[move.player_index] + move.number_of_stones
+       > maxNumberOfStonesOnASquare(move.square_index))
         return tl::make_unexpected(InvalidMove::TooManyStones);
     Board res = *this;
-    res.m_square_states[square_index].placed_stones[player_index] += number_of_stones;
-    if(res.m_square_states[square_index].placed_stones[player_index] == maxNumberOfStonesOnASquare(square_index))
+    res.m_square_states[move.square_index].placed_stones[move.player_index] += move.number_of_stones;
+    if(res.m_square_states[move.square_index].placed_stones[move.player_index]
+       == maxNumberOfStonesOnASquare(move.square_index))
     {
-        res.m_square_states[square_index].player_locked = player_index;
+        res.m_square_states[move.square_index].player_locked = move.player_index;
     }
     return res;
 }

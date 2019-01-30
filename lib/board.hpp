@@ -1,7 +1,6 @@
 #pragma once
 
-#include "player.hpp"
-#include "square.hpp"
+#include "move.hpp"
 
 #include <array>
 #include <map>
@@ -46,7 +45,7 @@ public:
 
     SquareState squareState(const Square square_index) const;
 
-    ExpectedBoard placeStone(Square square_index, Player player_index, const std::size_t number_of_stones) const;
+    ExpectedBoard placeStone(const Move move) const;
 
     static std::size_t maxNumberOfStonesOnASquare(const Square square_index);
 

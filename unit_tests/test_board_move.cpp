@@ -8,7 +8,7 @@
 
 using Aronda::Board;
 
-TEST_CASE("Testing placing a stone on en empty board", "[game]")
+TEST_CASE("Testing placing a stone on en empty board", "[board]")
 {
     Board g;
 
@@ -17,7 +17,7 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{18};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res = g.placeStone(s, Aronda::Player(0), 1);
+        const auto res = g.placeStone({s, Aronda::Player(0), 1});
         REQUIRE(res.has_value());
         CHECK(res->squareState(s) == Aronda::SquareState{{1, 0}, {}});
     }
@@ -27,7 +27,7 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{18};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res.has_value());
         CHECK(res->squareState(s) == Aronda::SquareState{{2, 0}, {}});
     }
@@ -37,11 +37,11 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{18};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res1 = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res1 = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res1.has_value());
         CHECK(res1->squareState(s) == Aronda::SquareState{{2, 0}, {}});
 
-        const auto res2 = res1->placeStone(s, Aronda::Player(0), 1);
+        const auto res2 = res1->placeStone({s, Aronda::Player(0), 1});
         REQUIRE(res2.has_value());
         CHECK(res2->squareState(s) == Aronda::SquareState{{3, 0}, {Aronda::Player(0)}});
     }
@@ -51,11 +51,11 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{18};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res1 = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res1 = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res1.has_value());
         CHECK(res1->squareState(s) == Aronda::SquareState{{2, 0}, {}});
 
-        const auto res2 = res1->placeStone(s, Aronda::Player(0), 2);
+        const auto res2 = res1->placeStone({s, Aronda::Player(0), 2});
         REQUIRE(!res2.has_value());
         CHECK(res2.error() == Aronda::InvalidMove::TooManyStones);
     }
@@ -65,7 +65,7 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{19};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res = g.placeStone(s, Aronda::Player(0), 1);
+        const auto res = g.placeStone({s, Aronda::Player(0), 1});
         REQUIRE(res.has_value());
         CHECK(res->squareState(s) == Aronda::SquareState{{1, 0}, {}});
     }
@@ -75,7 +75,7 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{19};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res.has_value());
         CHECK(res->squareState(s) == Aronda::SquareState{{2, 0}, {Aronda::Player(0)}});
     }
@@ -85,11 +85,11 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{19};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res1 = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res1 = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res1.has_value());
         CHECK(res1->squareState(s) == Aronda::SquareState{{2, 0}, {Aronda::Player(0)}});
 
-        const auto res2 = res1->placeStone(s, Aronda::Player(0), 1);
+        const auto res2 = res1->placeStone({s, Aronda::Player(0), 1});
         REQUIRE(!res2.has_value());
         CHECK(res2.error() == Aronda::InvalidMove::SquareLocked);
     }
@@ -99,11 +99,11 @@ TEST_CASE("Testing placing a stone on en empty board", "[game]")
         Aronda::Square s{19};
         CHECK(g.squareState(s) == Aronda::SquareState{{0, 0}, {}});
 
-        const auto res1 = g.placeStone(s, Aronda::Player(0), 2);
+        const auto res1 = g.placeStone({s, Aronda::Player(0), 2});
         REQUIRE(res1.has_value());
         CHECK(res1->squareState(s) == Aronda::SquareState{{2, 0}, {Aronda::Player(0)}});
 
-        const auto res2 = res1->placeStone(s, Aronda::Player(0), 2);
+        const auto res2 = res1->placeStone({s, Aronda::Player(0), 2});
         REQUIRE(!res2.has_value());
         CHECK(res2.error() == Aronda::InvalidMove::SquareLocked);
     }
