@@ -15,6 +15,10 @@ public:
 
     tl::expected<void, InvalidMove> placeStone(const Move move);
 
+    Player currentPlayer() const;
+
+    std::size_t stonesLeftToPlay() const;
+
 private:
     std::vector<Board> m_history;
 };

@@ -78,3 +78,29 @@ TEST_CASE("Testing the game state placing a stone on en empty board", "[game]")
         CHECK(g.currentState().squareState(s) == Aronda::SquareState{{2, 0}, {Aronda::Player(0)}});
     }
 }
+
+TEST_CASE("Testing the current player in the game state", "[game]")
+{
+    Game g;
+
+    SECTION("Black to play only one stone when starting a game")
+    {
+        CHECK(g.currentPlayer() == Aronda::Player(0));
+        CHECK(g.stonesLeftToPlay() == 1);
+    }
+
+    SECTION("First couple of moves to check whose turn is it and how many moves he should play")
+    {
+        REQUIRE(g.placeStone({Aronda::Square{19}, Aronda::Player(0), 1}).has_value());
+        CHECK(g.currentPlayer() == Aronda::Player(1));
+        CHECK(g.stonesLeftToPlay() == 2);
+
+        REQUIRE(g.placeStone({Aronda::Square{21}, Aronda::Player(1), 1}).has_value());
+        CHECK(g.currentPlayer() == Aronda::Player(1));
+        CHECK(g.stonesLeftToPlay() == 1);
+
+        REQUIRE(g.placeStone({Aronda::Square{21}, Aronda::Player(1), 1}).has_value());
+        CHECK(g.currentPlayer() == Aronda::Player(0));
+        CHECK(g.stonesLeftToPlay() == 2);
+    }
+}
