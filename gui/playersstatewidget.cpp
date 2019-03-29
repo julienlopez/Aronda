@@ -5,6 +5,7 @@
 #include <numeric_range.hpp>
 
 #include <gsl/gsl_assert>
+#include <gsl/gsl_util>
 
 #include <QHBoxLayout>
 #include <QPainter>
@@ -77,7 +78,7 @@ namespace Impl
             {
                 const auto x = (i + 1) * width() / (*m_display + 1) - radius / 2;
                 const auto y = height() / 2 - radius / 2;
-                p.drawEllipse(x, y, radius, radius);
+                p.drawEllipse(gsl::narrow<int>(x), gsl::narrow<int>(y), radius, radius);
             }
         }
     };
