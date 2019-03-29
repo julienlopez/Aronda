@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget* parent)
     m_players_state_widget->setMinimumHeight(100);
     vl->addWidget(m_players_state_widget);
 
-    m_board_widget = new Aronda::BoardWidget;
+    m_board_widget = new Aronda::BoardWidget(*m_game);
     vl->addWidget(m_board_widget);
 
     w->setLayout(vl);
