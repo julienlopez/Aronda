@@ -53,7 +53,7 @@ public:
 private:
     std::array<SquareState, c_number_of_squares> m_square_states;
 
-	static bool isSquareOnTheOutsideRing(const Square square);
+    static bool isSquareOnTheOutsideRing(const Square square);
 };
 
 } // namespace Aronda
