@@ -24,6 +24,7 @@ auto Board::placeStone(const Move move) const -> ExpectedBoard
     if(m_square_states[move.square_index].placed_stones[move.player_index] + move.number_of_stones
        > maxNumberOfStonesOnASquare(move.square_index))
         return tl::make_unexpected(InvalidMove::TooManyStones);
+    if(!isSquareOnTheOutsideRing(move.square_index)) return tl::make_unexpected(InvalidMove::SquareUnreachable);
     Board res = *this;
     res.m_square_states[move.square_index].placed_stones[move.player_index] += move.number_of_stones;
     if(res.m_square_states[move.square_index].placed_stones[move.player_index]
@@ -32,6 +33,11 @@ auto Board::placeStone(const Move move) const -> ExpectedBoard
         res.m_square_states[move.square_index].player_locked = move.player_index;
     }
     return res;
+}
+
+bool Board::isSquareOnTheOutsideRing(const Square square)
+{
+    return square >= 17;
 }
 
 std::size_t Board::maxNumberOfStonesOnASquare(const Square square_index)

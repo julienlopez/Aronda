@@ -107,4 +107,43 @@ TEST_CASE("Testing placing a stone on en empty board", "[board]")
         REQUIRE(!res2.has_value());
         CHECK(res2.error() == Aronda::InvalidMove::SquareLocked);
     }
+
+    SECTION("Trying to place a stone on the fourth ring on an empty board should be possible")
+    {
+        for(const auto square : range<std::size_t>(17, 25))
+        {
+            std::wcout << square << std::endl;
+            const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
+            REQUIRE(res.has_value());
+        }
+    }
+
+    SECTION("Trying to place a stone on the second ring on an empty board should fail")
+    {
+        for(const auto square : range<std::size_t>(9, 17))
+        {
+            std::wcout << square << std::endl;
+            const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
+            REQUIRE(!res.has_value());
+            CHECK(res.error() == Aronda::InvalidMove::SquareUnreachable);
+        }
+    }
+
+    SECTION("Trying to place a stone on the third ring on an empty board should fail")
+    {
+        for(const auto square : range<std::size_t>(1, 9))
+        {
+            std::wcout << square << std::endl;
+            const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
+            REQUIRE(!res.has_value());
+            CHECK(res.error() == Aronda::InvalidMove::SquareUnreachable);
+        }
+    }
+
+    SECTION("Trying to place a stone on the central square on an empty board should fail")
+    {
+        const auto res = g.placeStone({Aronda::Square{0}, Aronda::black, 1});
+        REQUIRE(!res.has_value());
+        CHECK(res.error() == Aronda::InvalidMove::SquareUnreachable);
+    }
 }
