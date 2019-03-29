@@ -44,7 +44,7 @@ public:
      */
     Board();
 
-    SquareState squareState(const Square square_index) const;
+    SquareState squareState(const Square square) const;
 
     ExpectedBoard placeStone(const Move move) const;
 
@@ -53,7 +53,11 @@ public:
 private:
     std::array<SquareState, c_number_of_squares> m_square_states;
 
+    bool isSquareReachable(const Move move) const;
+
     static bool isSquareOnTheOutsideRing(const Square square);
+
+    static std::set<Square> findNeighbours(const Square square);
 };
 
 } // namespace Aronda

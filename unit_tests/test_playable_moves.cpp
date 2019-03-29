@@ -32,7 +32,7 @@ TEST_CASE("Testing playable moves throughout the game", "[board]")
             }
             else
             {
-                REQUIRE(!res.has_value());
+                REQUIRE_FALSE(res.has_value());
                 CHECK(res.error() == InvalidMove::SquareUnreachable);
             }
         }
@@ -53,7 +53,30 @@ TEST_CASE("Testing playable moves throughout the game", "[board]")
             }
             else
             {
-                REQUIRE(!res.has_value());
+                REQUIRE_FALSE(res.has_value());
+                CHECK(res.error() == InvalidMove::SquareUnreachable);
+            }
+        }
+    }
+
+    SECTION("Playing one stone on an outside square unlocks all underlying squares")
+    {
+        Board g;
+        auto res = g.placeStone({Square{24}, Aronda::black, 1});
+        REQUIRE(res.has_value());
+        res = g.placeStone({Square{24}, Aronda::white, 1});
+        REQUIRE(res.has_value());
+        const std::vector<std::size_t> playable_moves = {9, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
+        for(const auto square : range<std::size_t>(0, Aronda::c_number_of_squares))
+        {
+            res = g.placeStone({Square{square}, Aronda::white, 1});
+            if(contains(playable_moves, square))
+            {
+                CHECK(res.has_value());
+            }
+            else
+            {
+                REQUIRE_FALSE(res.has_value());
                 CHECK(res.error() == InvalidMove::SquareUnreachable);
             }
         }
