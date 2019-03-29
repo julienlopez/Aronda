@@ -1,14 +1,13 @@
 #include <QApplication>
-#include <iostream>
 
-#include "boardwidget.hpp"
+#include "mainwindow.hpp"
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    auto* b = new Aronda::BoardWidget;
-    b->show();
+    Aronda::MainWindow w;
+    w.show();
 
     return app.exec();
 }
