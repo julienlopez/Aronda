@@ -1,6 +1,6 @@
 #include "boardwidget.hpp"
 
-#include "board.hpp"
+#include "game.hpp"
 
 #include <gsl/gsl_util>
 
@@ -32,8 +32,9 @@ namespace
     }
 }
 
-BoardWidget::BoardWidget(QWidget* parent)
+BoardWidget::BoardWidget(Game& game, QWidget* parent)
     : QWidget(parent)
+    , m_game(game)
 {
     setMinimumSize(600, 600);
     setMouseTracking(true);
@@ -133,7 +134,7 @@ void BoardWidget::drawCurrentSquare(QPainter& p) const
     const auto& square = m_squares[*m_current_square];
     p.save();
     p.setPen(Qt::NoPen);
-    p.setBrush(Qt::red);
+    p.setBrush(isSquarePlayable(*m_current_square) ? Qt::green : Qt::red);
     QPainterPath pp;
     pp.moveTo(toPoint({square.inner_radius, square.min_angle}));
     pp.lineTo(toPoint({square.outter_radius, square.min_angle}));
@@ -160,4 +161,16 @@ boost::optional<Square> BoardWidget::findSquare(const PolarPoint& p) const
     }
     return boost::none;
 }
+
+bool BoardWidget::isSquarePlayable(const Square square) const
+{
+    const auto move = buildMoveForSquare(square);
+    return m_game.currentState().placeStone(move).has_value();
 }
+
+Move BoardWidget::buildMoveForSquare(const Square square) const
+{
+    return {square, m_game.currentPlayer(), 1};
+}
+
+} // Aronda
