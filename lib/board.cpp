@@ -5,35 +5,26 @@ namespace Aronda
 
 namespace
 {
+    Square operator"" _s(std::size_t i)
+    {
+        return Square(i);
+    }
+
     AdjacencyList_t buildAdjacencyList()
     {
-        using Aronda::Square;
-        return {
-			{Square(0), {}},  
-			{Square(1), {}},  
-			{Square(2), {}},  
-			{Square(3), {}},  
-			{Square(4), {}},  
-			{Square(5), {}},  
-			{Square(6), {}},  
-			{Square(7), {}},  
-			{Square(8), {}},
-            {Square(9), {}}, 
-			{Square(10), {}}, 
-			{Square(11), {}}, 
-			{Square(12), {}}, 
-			{Square(13), {}}, 
-			{Square(14), {}},
-			{Square(15), {}},
-			{Square(16), {}}, 
-			{Square(17), {}},
-            {Square(18), {}}, 
-			{Square(19), {}}, 
-			{Square(20), {}}, 
-			{Square(21), {}}, 
-			{Square(22), {}}, 
-			{Square(23), {}}, 
-			{Square(24), {}}};
+        return {{0_s, {1_s, 2_s, 3_s, 4_s, 5_s, 6_s, 7_s}}, {1_s, {0_s, 2_s, 8_s, 9_s, 10_s}},
+                {2_s, {0_s, 1_s, 3_s, 10_s, 11_s}},         {3_s, {0_s, 2_s, 4_s, 11_s, 12_s}},
+                {4_s, {0_s, 3_s, 5_s, 12_s, 13_s}},         {5_s, {0_s, 4_s, 6_s, 13_s, 14_s}},
+                {6_s, {0_s, 5_s, 7_s, 14_s, 15_s}},         {7_s, {0_s, 6_s, 8_s, 15_s, 16_s}},
+                {8_s, {0_s, 1_s, 7_s, 9_s, 16_s}},          {9_s, {1_s, 8_s, 10_s, 16_s, 17_s, 18_s, 24_s}},
+                {10_s, {1_s, 2_s, 9_s, 11_s, 18_s}},        {11_s, {2_s, 3_s, 10_s, 12_s, 18_s, 19_s, 20_s}},
+                {12_s, {3_s, 4_s, 11_s, 13_s, 20_s}},       {13_s, {4_s, 5_s, 12_s, 14_s, 20_s, 21_s, 22_s}},
+                {14_s, {5_s, 6_s, 13_s, 15_s, 22_s}},       {15_s, {6_s, 7_s, 14_s, 16_s, 22_s, 23_s, 24_s}},
+                {16_s, {7_s, 8_s, 9_s, 15_s, 24_s}},        {17_s, {9_s, 18_s, 24_s}},
+                {18_s, {9_s, 10_s, 11_s, 17_s, 19_s}},      {19_s, {11_s, 18_s, 20_s}},
+                {20_s, {11_s, 12_s, 13_s, 19_s, 21_s}},     {21_s, {13_s, 20_s, 22_s}},
+                {22_s, {13_s, 14_s, 15_s, 21_s, 23_s}},     {23_s, {15_s, 22_s, 24_s}},
+                {24_s, {9_s, 15_s, 16_s, 17_s, 23_s}}};
     }
 }
 
