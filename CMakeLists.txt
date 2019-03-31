@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 project(Aronda)
 
+set(CMAKE_CXX_STANDARD 14)
+
 include_directories(3rd_party/catch2)
 include_directories(3rd_party/range)
 include_directories(expected)
