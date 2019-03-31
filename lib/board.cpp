@@ -5,7 +5,7 @@ namespace Aronda
 
 namespace
 {
-    Square operator"" _s(std::size_t i)
+    Square operator"" _s(unsigned long long int i)
     {
         return Square(i);
     }
