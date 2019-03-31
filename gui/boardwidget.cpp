@@ -64,13 +64,19 @@ void BoardWidget::paintEvent(QPaintEvent* evt)
 
 void BoardWidget::mouseMoveEvent(QMouseEvent* evt)
 {
-    const auto pos = evt->pos() - QPoint(width(), height()) / 2;
-    const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
-    auto angle = std::atan2(pos.x(), -pos.y()) * radians;
-    auto res = findSquare({radius, angle});
-    if(!res) res = findSquare({radius, angle + 2. * PI});
-    m_current_square = res;
+    m_current_square = mousePosToSquare(evt->pos());
     update();
+}
+
+void BoardWidget::mouseReleaseEvent(QMouseEvent* evt)
+{
+    if(!m_current_square) return;
+    const auto res = m_game.placeStone({*m_current_square, m_game.currentPlayer(), 1});
+    if(res)
+    {
+        update();
+        emit movePlayed();
+    }
 }
 
 void BoardWidget::drawCircles(QPainter& p) const
@@ -171,6 +177,16 @@ bool BoardWidget::isSquarePlayable(const Square square) const
 Move BoardWidget::buildMoveForSquare(const Square square) const
 {
     return {square, m_game.currentPlayer(), 1};
+}
+
+boost::optional<Square> BoardWidget::mousePosToSquare(const QPoint& mouse_pos) const
+{
+    const auto pos = mouse_pos - QPoint(width(), height()) / 2;
+    const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
+    auto angle = std::atan2(pos.x(), -pos.y()) * radians;
+    auto res = findSquare({radius, angle});
+    if(!res) res = findSquare({radius, angle + 2. * PI});
+    return res;
 }
 
 } // Aronda

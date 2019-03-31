@@ -21,13 +21,14 @@ MainWindow::MainWindow(QWidget* parent)
     m_players_state_widget->setMinimumHeight(100);
     vl->addWidget(m_players_state_widget);
 
-    m_board_widget = new Aronda::BoardWidget(*m_game);
+    m_board_widget = new BoardWidget(*m_game);
     vl->addWidget(m_board_widget);
 
     w->setLayout(vl);
     setCentralWidget(w);
 
     m_players_state_widget->updateCurrentPlayer();
+    connect(m_board_widget, &BoardWidget::movePlayed, m_players_state_widget, &PlayersStateWidget::updateCurrentPlayer);
 }
 
 MainWindow::~MainWindow() = default;
