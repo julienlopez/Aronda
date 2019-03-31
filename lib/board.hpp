@@ -58,6 +58,8 @@ private:
     static bool isSquareOnTheOutsideRing(const Square square);
 
     static std::set<Square> findNeighbours(const Square square);
+
+    bool hasPlayerPlayerOnSquare(const Player player, const Square square) const;
 };
 
 } // namespace Aronda

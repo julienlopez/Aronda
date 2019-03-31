@@ -84,7 +84,10 @@ bool Board::isSquareReachable(const Move move) const
 {
     if(isSquareOnTheOutsideRing(move.square_index)) return true;
     const auto neighbouring_squares = findNeighbours(move.square_index);
-    return false;
+    using std::placeholders::_1;
+    return std::find_if(begin(neighbouring_squares), end(neighbouring_squares),
+                        std::bind(std::mem_fn(&Board::hasPlayerPlayerOnSquare), this, move.player_index, _1))
+           != end(neighbouring_squares);
 }
 
 bool Board::isSquareOnTheOutsideRing(const Square square)
@@ -96,5 +99,11 @@ std::set<Square> Board::findNeighbours(const Square square)
 {
     static const auto adjacencty_list = buildAdjacencyList();
     return adjacencty_list.at(square);
+}
+
+bool Board::hasPlayerPlayerOnSquare(const Player player, const Square square) const
+{
+    const auto& square_state = m_square_states[square];
+    return square_state.placed_stones[player] > 0;
 }
 }
