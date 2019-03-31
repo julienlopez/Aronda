@@ -2,6 +2,8 @@
 
 #include "board.hpp"
 
+#include <vector>
+
 namespace Aronda
 {
 
