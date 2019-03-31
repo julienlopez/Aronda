@@ -112,7 +112,6 @@ TEST_CASE("Testing placing a stone on en empty board", "[board]")
     {
         for(const auto square : range<std::size_t>(17, 25))
         {
-            std::wcout << square << std::endl;
             const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
             REQUIRE(res.has_value());
         }
@@ -122,7 +121,6 @@ TEST_CASE("Testing placing a stone on en empty board", "[board]")
     {
         for(const auto square : range<std::size_t>(9, 17))
         {
-            std::wcout << square << std::endl;
             const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
             REQUIRE(!res.has_value());
             CHECK(res.error() == Aronda::InvalidMove::SquareUnreachable);
@@ -133,7 +131,6 @@ TEST_CASE("Testing placing a stone on en empty board", "[board]")
     {
         for(const auto square : range<std::size_t>(1, 9))
         {
-            std::wcout << square << std::endl;
             const auto res = g.placeStone({Aronda::Square{square}, Aronda::black, 1});
             REQUIRE(!res.has_value());
             CHECK(res.error() == Aronda::InvalidMove::SquareUnreachable);
