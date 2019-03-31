@@ -54,6 +54,8 @@ private:
 
     void drawCurrentSquare(QPainter& p) const;
 
+    void drawStones(QPainter& p) const;
+
     boost::optional<Square> findSquare(const PolarPoint& p) const;
 
     bool isSquarePlayable(const Square square) const;

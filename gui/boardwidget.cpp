@@ -60,6 +60,7 @@ void BoardWidget::paintEvent(QPaintEvent* evt)
     drawCircles(p);
     drawLines(p);
     drawMaxmimumsInSquares(p);
+    drawStones(p);
 }
 
 void BoardWidget::mouseMoveEvent(QMouseEvent* evt)
@@ -153,6 +154,22 @@ void BoardWidget::drawCurrentSquare(QPainter& p) const
 
     p.drawPath(pp);
     p.restore();
+}
+
+void BoardWidget::drawStones(QPainter& p) const
+{
+    p.setPen(Qt::green);
+    for(const auto& square : m_squares)
+    {
+        const auto radius = square.inner_radius  == 0 ? 0 : (square.outter_radius + square.inner_radius) / 2;
+        const PolarPoint center{(square.outter_radius + square.inner_radius)/2, (square.max_angle + square.min_angle) / 2. };
+        const auto size = (square.outter_radius - square.inner_radius) / 3;
+        const auto r_max = center.radius + size / 2;
+        const auto r_min = center.radius - size / 2;
+        const auto stone_size = size / 2;
+        p.drawEllipse(toPoint({r_min, center.angle}), stone_size, stone_size);
+        p.drawEllipse(toPoint({r_max, center.angle}), stone_size, stone_size);
+    }
 }
 
 boost::optional<Square> BoardWidget::findSquare(const PolarPoint& p) const
