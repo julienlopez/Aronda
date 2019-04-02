@@ -2,6 +2,8 @@
 
 #include "game.hpp"
 
+#include "numeric_range.hpp"
+
 #include <gsl/gsl_util>
 
 #include <QMouseEvent>
@@ -30,7 +32,13 @@ namespace
     {
         return 360. * a / 2. / PI;
     }
-}
+
+    QImage stoneImage(Player player)
+    {
+        return player == black ? QImage(":/images/black_stone.svg") : QImage(":/images/white_stone.svg");
+    }
+
+} // namespace
 
 BoardWidget::BoardWidget(Game& game, QWidget* parent)
     : QWidget(parent)
@@ -159,16 +167,45 @@ void BoardWidget::drawCurrentSquare(QPainter& p) const
 void BoardWidget::drawStones(QPainter& p) const
 {
     p.setPen(Qt::green);
-    for(const auto& square : m_squares)
+    for(const auto square_index : range(c_number_of_squares))
     {
-        const auto radius = square.inner_radius  == 0 ? 0 : (square.outter_radius + square.inner_radius) / 2;
-        const PolarPoint center{(square.outter_radius + square.inner_radius)/2, (square.max_angle + square.min_angle) / 2. };
+        const auto& square = m_squares[square_index];
+        const auto radius = square.inner_radius == 0 ? 0 : (square.outter_radius + square.inner_radius) / 2;
+        const PolarPoint center{(square.outter_radius + square.inner_radius) / 2,
+                                (square.max_angle + square.min_angle) / 2.};
+        const auto cart_center = toPoint(center);
         const auto size = (square.outter_radius - square.inner_radius) / 3;
         const auto r_max = center.radius + size / 2;
         const auto r_min = center.radius - size / 2;
         const auto stone_size = size / 2;
-        p.drawEllipse(toPoint({r_min, center.angle}), stone_size, stone_size);
-        p.drawEllipse(toPoint({r_max, center.angle}), stone_size, stone_size);
+        const auto square_state = m_game.currentState().squareState(Square{square_index});
+        if(square_state.player_locked)
+        {
+            const auto& img = stoneImage(*square_state.player_locked);
+            p.drawImage(QRect(cart_center.toPoint() - QPointF(size, size).toPoint(), 2 * QSize(size, size)), img);
+        }
+        else
+        {
+            const auto d_angle = square.max_angle - square.min_angle;
+            auto nb_stones = square_state.placed_stones[black];
+            auto img = stoneImage(black);
+			for (const auto i : range(nb_stones))
+            {
+                const auto angle = square.min_angle + (double)(i + 1) * d_angle / (double)(nb_stones + 1); 
+				const auto pt = toPoint({r_min, angle});
+                p.drawImage(QRect(pt.toPoint() - QPointF(stone_size, stone_size).toPoint() / 2, QSize(stone_size, stone_size)), img);
+            }
+            nb_stones = square_state.placed_stones[white];
+            img = stoneImage(white);
+            for(const auto i : range(nb_stones))
+            {
+                const auto angle = square.min_angle + (double)(i + 1) * d_angle / (double)(nb_stones + 1);
+                const auto pt = toPoint({r_max, angle});
+                p.drawImage(
+                    QRect(pt.toPoint() - QPointF(stone_size, stone_size).toPoint() / 2, QSize(stone_size, stone_size)),
+                    img);
+            }
+        }
     }
 }
 
@@ -206,4 +243,4 @@ boost::optional<Square> BoardWidget::mousePosToSquare(const QPoint& mouse_pos) c
     return res;
 }
 
-} // Aronda
+} // namespace Aronda
