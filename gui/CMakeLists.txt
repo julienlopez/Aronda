@@ -18,9 +18,10 @@ else()
 endif()
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 file(GLOB_RECURSE SOURCE_FILES ./*)
-add_executable(Aronda ${SOURCE_FILES})
+add_executable(Aronda ${SOURCE_FILES} images.qrc)
 
 target_link_libraries(Aronda libAronda)
 foreach(MODULE ${AR_QT_MODULES})
