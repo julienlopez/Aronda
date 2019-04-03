@@ -177,7 +177,6 @@ void BoardWidget::drawStones(QPainter& p) const
         const auto size = (square.outter_radius - square.inner_radius) / 3;
         const auto r_max = center.radius + size / 2;
         const auto r_min = center.radius - size / 2;
-        const auto stone_size = size / 2;
         const auto square_state = m_game.currentState().squareState(Square{square_index});
         if(square_state.player_locked)
         {
@@ -186,6 +185,7 @@ void BoardWidget::drawStones(QPainter& p) const
         }
         else
         {
+            const auto stone_size = size / 2;
             const auto d_angle = square.max_angle - square.min_angle;
             auto nb_stones = square_state.placed_stones[black];
             auto img = stoneImage(black);
@@ -193,7 +193,8 @@ void BoardWidget::drawStones(QPainter& p) const
             {
                 const auto angle = square.min_angle + (double)(i + 1) * d_angle / (double)(nb_stones + 1); 
 				const auto pt = toPoint({r_min, angle});
-                p.drawImage(QRect(pt.toPoint() - QPointF(stone_size, stone_size).toPoint() / 2, QSize(stone_size, stone_size)), img);
+                p.drawImage(QRect(pt.toPoint() - QPointF(size, size).toPoint() / 2, QSize(size, size)),
+                            img);
             }
             nb_stones = square_state.placed_stones[white];
             img = stoneImage(white);
@@ -201,8 +202,7 @@ void BoardWidget::drawStones(QPainter& p) const
             {
                 const auto angle = square.min_angle + (double)(i + 1) * d_angle / (double)(nb_stones + 1);
                 const auto pt = toPoint({r_max, angle});
-                p.drawImage(
-                    QRect(pt.toPoint() - QPointF(stone_size, stone_size).toPoint() / 2, QSize(stone_size, stone_size)),
+                p.drawImage(QRect(pt.toPoint() - QPointF(size, size).toPoint() / 2, QSize(size, size)),
                     img);
             }
         }
