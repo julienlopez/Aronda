@@ -16,6 +16,8 @@ class Game;
 
 class BoardWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
     struct PolarPoint
     {
@@ -27,12 +29,17 @@ public:
 
     virtual ~BoardWidget() = default;
 
+signals:
+    void movePlayed();
+
 protected:
     virtual void resizeEvent(QResizeEvent* evt) override;
 
     virtual void paintEvent(QPaintEvent* evt) override;
 
     virtual void mouseMoveEvent(QMouseEvent* evt) override;
+
+    virtual void mouseReleaseEvent(QMouseEvent* evt) override;
 
 private:
     Game& m_game;
@@ -47,10 +54,14 @@ private:
 
     void drawCurrentSquare(QPainter& p) const;
 
+    void drawStones(QPainter& p) const;
+
     boost::optional<Square> findSquare(const PolarPoint& p) const;
 
     bool isSquarePlayable(const Square square) const;
 
     Move buildMoveForSquare(const Square square) const;
+
+    boost::optional<Square> mousePosToSquare(const QPoint& mouse_pos) const;
 };
 } // Aronda

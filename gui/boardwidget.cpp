@@ -2,6 +2,8 @@
 
 #include "game.hpp"
 
+#include "numeric_range.hpp"
+
 #include <gsl/gsl_util>
 
 #include <QMouseEvent>
@@ -30,7 +32,26 @@ namespace
     {
         return 360. * a / 2. / PI;
     }
-}
+
+    QImage stoneImage(Player player)
+    {
+        return player == black ? QImage(":/images/black_stone.svg") : QImage(":/images/white_stone.svg");
+    }
+
+    void paintSmallStone(QPainter& p, const std::size_t nb_stones, const GameSquare& square, const QImage& stone_image,
+                         double radius)
+    {
+        const auto d_angle = square.max_angle - square.min_angle;
+        const auto size = (square.outter_radius - square.inner_radius) / 3;
+        for(const auto i : range(nb_stones))
+        {
+            const auto angle = square.min_angle + (double)(i + 1) * d_angle / (double)(nb_stones + 1);
+            const auto pt = toPoint({radius, angle});
+            p.drawImage(QRect(pt.toPoint() - QPointF(size, size).toPoint() / 2, QSize(size, size)), stone_image);
+        }
+    }
+
+} // namespace
 
 BoardWidget::BoardWidget(Game& game, QWidget* parent)
     : QWidget(parent)
@@ -60,17 +81,24 @@ void BoardWidget::paintEvent(QPaintEvent* evt)
     drawCircles(p);
     drawLines(p);
     drawMaxmimumsInSquares(p);
+    drawStones(p);
 }
 
 void BoardWidget::mouseMoveEvent(QMouseEvent* evt)
 {
-    const auto pos = evt->pos() - QPoint(width(), height()) / 2;
-    const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
-    auto angle = std::atan2(pos.x(), -pos.y()) * radians;
-    auto res = findSquare({radius, angle});
-    if(!res) res = findSquare({radius, angle + 2. * PI});
-    m_current_square = res;
+    m_current_square = mousePosToSquare(evt->pos());
     update();
+}
+
+void BoardWidget::mouseReleaseEvent(QMouseEvent* evt)
+{
+    if(!m_current_square) return;
+    const auto res = m_game.placeStone({*m_current_square, m_game.currentPlayer(), 1});
+    if(res)
+    {
+        update();
+        emit movePlayed();
+    }
 }
 
 void BoardWidget::drawCircles(QPainter& p) const
@@ -149,9 +177,34 @@ void BoardWidget::drawCurrentSquare(QPainter& p) const
     p.restore();
 }
 
+void BoardWidget::drawStones(QPainter& p) const
+{
+    p.setPen(Qt::green);
+    for(const auto square_index : range(c_number_of_squares))
+    {
+        const auto& square = m_squares[square_index];
+        const PolarPoint center{(square.outter_radius + square.inner_radius) / 2,
+                                (square.max_angle + square.min_angle) / 2.};
+        const auto size = (square.outter_radius - square.inner_radius) / 3;
+        const auto square_state = m_game.currentState().squareState(Square{square_index});
+        if(square_state.player_locked)
+        {
+            const auto cart_center = toPoint(center);
+            const auto& img = stoneImage(*square_state.player_locked);
+            p.drawImage(QRect(cart_center.toPoint() - QPointF(size, size).toPoint(), 2 * QSize(size, size)), img);
+        }
+        else
+        {
+            const auto r_max = center.radius + size / 2;
+            const auto r_min = center.radius - size / 2;
+            paintSmallStone(p, square_state.placed_stones[black], square, stoneImage(black), r_min);
+            paintSmallStone(p, square_state.placed_stones[white], square, stoneImage(white), r_max);
+        }
+    }
+}
+
 boost::optional<Square> BoardWidget::findSquare(const PolarPoint& p) const
 {
-
     for(std::size_t i = 0; i < m_squares.size(); i++)
     {
         const auto& s = m_squares[i];
@@ -173,4 +226,14 @@ Move BoardWidget::buildMoveForSquare(const Square square) const
     return {square, m_game.currentPlayer(), 1};
 }
 
-} // Aronda
+boost::optional<Square> BoardWidget::mousePosToSquare(const QPoint& mouse_pos) const
+{
+    const auto pos = mouse_pos - QPoint(width(), height()) / 2;
+    const auto radius = std::sqrt(QPointF::dotProduct(pos, pos));
+    auto angle = std::atan2(pos.x(), -pos.y()) * radians;
+    auto res = findSquare({radius, angle});
+    if(!res) res = findSquare({radius, angle + 2. * PI});
+    return res;
+}
+
+} // namespace Aronda
